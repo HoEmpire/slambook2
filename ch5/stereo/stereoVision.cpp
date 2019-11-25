@@ -5,6 +5,8 @@
 #include <pangolin/pangolin.h>
 #include <unistd.h>
 
+#include <chrono>
+
 using namespace std;
 using namespace Eigen;
 
@@ -26,12 +28,18 @@ int main(int argc, char **argv) {
     // 读取图像
     cv::Mat left = cv::imread(left_file, 0);
     cv::Mat right = cv::imread(right_file, 0);
-    cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(
+    cv::Ptr<cv::StereoSGBM> sgbm = cv::StereoSGBM::create(    //cv::Ptr<cv::StereoSGBM> 涉及立体匹配算法
         0, 96, 9, 8 * 9 * 9, 32 * 9 * 9, 1, 63, 10, 100, 32);    // 神奇的参数
     cv::Mat disparity_sgbm, disparity;
+
+    chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
     sgbm->compute(left, right, disparity_sgbm);
     disparity_sgbm.convertTo(disparity, CV_32F, 1.0 / 16.0f);
 
+    chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+    chrono::duration<double> time_used = chrono::duration_cast < chrono::duration < double >> (t2 - t1);
+    cout << "计算用时：" << time_used.count() * 1000 << " 毫秒。" << endl;
+    
     // 生成点云
     vector<Vector4d, Eigen::aligned_allocator<Vector4d>> pointcloud;
 
@@ -52,6 +60,8 @@ int main(int argc, char **argv) {
 
             pointcloud.push_back(point);
         }
+
+    
 
     cv::imshow("disparity", disparity / 96.0);
     cv::waitKey(0);

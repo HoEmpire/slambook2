@@ -243,7 +243,7 @@ void OpticalFlowTracker::calculateOpticalFlow(const Range &range) {
                     // compute H, b and set cost;
                     b += -error * J;
                     cost += error * error;
-                    if (inverse == false || iter == 0) {
+                    if (inverse == false || iter == 0) { // Bug here in this condition 
                         // also update H
                         H += J * J.transpose();
                     }

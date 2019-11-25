@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
     pts_3d.push_back(Point3f(p1.x * dd, p1.y * dd, dd));
     pts_2d.push_back(keypoints_2[m.trainIdx].pt);
   }
-
+  // cout << "real z:" << pts_3d[0].z << endl;
   cout << "3d-2d pairs: " << pts_3d.size() << endl;
 
   chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
@@ -311,7 +311,7 @@ void bundleAdjustmentG2O(
   Sophus::SE3d &pose) {
 
   // 构建图优化，先设定g2o
-  typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 3>> BlockSolverType;  // pose is 6, landmark is 3
+  typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 3>> BlockSolverType;  //  pose is 6, landmark is 3 (dimension of input measurement
   typedef g2o::LinearSolverDense<BlockSolverType::PoseMatrixType> LinearSolverType; // 线性求解器类型
   // 梯度下降方法，可以从GN, LM, DogLeg 中选
   auto solver = new g2o::OptimizationAlgorithmGaussNewton(

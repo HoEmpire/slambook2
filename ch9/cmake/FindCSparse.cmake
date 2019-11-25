@@ -2,7 +2,6 @@
 FIND_PATH(CSPARSE_INCLUDE_DIR NAMES cs.h
   PATHS
   /usr/include/suitesparse
-  /usr/include
   /opt/local/include
   /usr/local/include
   /sw/include
